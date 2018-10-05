@@ -2,11 +2,11 @@
 This small PHP script works as follows:
 * Called periodically via cronjob
 * If new mails are in the Inbox (e.g. support@varioous.at)
-** The script automatically creats a ticket
-** If the user has no account a account is created and invitation mail is sent to user
-** If the user has no support-project assigned (identifier contains "support") a new project is created. This is needed because otherwise the user would see the support tickets of other projects/user
-** If the user has a account and a support-project, the ticket is created in this support-project
-** A mail to the user is sent with information about the ticket (number, link)
+  * The script automatically creats a ticket
+  * If the user has no account a account is created and invitation mail is sent to user 
+  * If the user has no support-project assigned (identifier contains "support") a new project is created. This is needed because otherwise the user would see the support tickets of other projects/user
+  * If the user has a account and a support-project, the ticket is created in this support-project
+  * A mail to the user is sent with information about the ticket (number, link)
 
 ## Compatibility
 * Tested with OpenProject 8.0.1
