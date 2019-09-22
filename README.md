@@ -11,7 +11,14 @@ This small PHP script works as follows:
 * Job integration: For every incoming mail to a job adress an automatic ticket is created in the ticket project inside OpenProject and assigned to the human ressource person
 
 ## Infos
-Find more infos in [this](https://varioous.at/blog/ticketing-system-mit-openproject/) blog post about "Ticketing-System mit OpenProject" - German only.
+* Find more infos in [this](https://varioous.at/blog/ticketing-system-mit-openproject/) blog post about "Ticketing-System mit OpenProject" - German only.
+* Blog post update [here](https://varioous.at/blog/ticketing-system-mit-openproject-update/)
+
+## Updates
+* composer support
+* slack integration
+* installation instruction
+* creation of tickets from job mailbox
 
 ## Features
 * Turn OpenProject in a ticket system
@@ -49,3 +56,6 @@ Find more infos in [this](https://varioous.at/blog/ticketing-system-mit-openproj
 ## Possible future improvments:
 * Bot / spam check
 * Make it available as OpenProject Plugin
+
+## Sponsorship
+Development time and resources for this tool are provided by [varioous](https://varioous.at/), a digital agency based in upper austria.
