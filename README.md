@@ -9,6 +9,7 @@ This small PHP script works as follows:
   * A mail to the user is sent with information about the ticket (number, link)
 * Slack integration: After ticket creation a slack message is sent to slack channel
 * Job integration: For every incoming mail to a job adress an automatic ticket is created in the ticket project inside OpenProject and assigned to the human ressource person
+* Reply to ticket (with ticket id in subject): A comment on the ticket is created
 
 ## Infos
 * Find more infos in [this](https://varioous.at/blog/ticketing-system-mit-openproject/) blog post about "Ticketing-System mit OpenProject" - German only.
@@ -19,6 +20,7 @@ This small PHP script works as follows:
 * slack integration
 * installation instruction
 * creation of tickets from job mailbox
+* reply to ticket (with ticket id in subject): A comment on the ticket is created
 
 ## Features
 * Turn OpenProject in a ticket system
