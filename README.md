@@ -10,21 +10,21 @@ This small PHP script works as follows:
 * Slack integration: After ticket creation a slack message is sent to slack channel
 * Job integration: For every incoming mail to a job adress an automatic ticket is created in the ticket project inside OpenProject and assigned to the human ressource person
 
-##Infos
+## Infos
 Find more infos in [this](https://varioous.at/blog/ticketing-system-mit-openproject/) blog post about "Ticketing-System mit OpenProject" - German only.
 
-##Features
+## Features
 * Turn OpenProject in a ticket system
 * Slack Integration
 * Support for job applications
 
-##Requirements
+## Requirements
 * Web server with php 7+
 * OpenProject server with version 8.0.0+
 * OpenProject server with ssh server runing
 * Mail server (mail box as imap available)
 
-##Installation
+## Installation
 * Configure OpenProject 
   * Configure user creation (users will get mail for activation)
   * Get api key
