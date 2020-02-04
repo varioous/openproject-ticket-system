@@ -48,7 +48,7 @@ This small PHP script works as follows:
 * Remove some varioous specific checks (e.q. we always check for {Spam?} in mail subject, because our mail scanner always add's this to subject if mail is possible spam.
 
 ## Compatibility
-* OpenProject 8.0.0-9.0.3 (tested)
+* OpenProject 8.0.0-10.3.1 (tested)
 
 ## Useful informations
 * The script marks mails as flagged if the already processed by the script
