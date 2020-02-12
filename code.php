@@ -45,18 +45,6 @@ class OpenProject
     //url of the open project api
     const OPEN_PROJECT_API_URL = "https://projects.varioous.at/api/v" . self::OPEN_PROJECT_API_VERSION . "/";
 
-    //domain name of the ssh server (open project server)
-    const OPEN_PROJECT_SSH_SERVER_DOMAIN_NAME = "xxxxxxxxx";
-
-    //user name to connect via ssh
-    const OPEN_PROJECT_SSH_SERVER_USERNAME = "xxxxxxxxx";
-
-    //password to connect via ssh
-    const OPEN_PROJECT_SSH_SERVER_PASSWORD = "xxxxxxxxx";
-
-    //port to connect via ssh
-    const OPEN_PROJECT_SSH_SERVER_PORT = 00;
-
     //slack tocken to send message
     const SLACK_TOKEN = "xxxxxxxxx";
 
@@ -187,50 +175,25 @@ class OpenProject
 
         //check if support project found
         if ($supportProjectId == -1) {
-            //login via ssh to open project server
-            $ssh =
-                new \phpseclib\Net\SSH2(self::OPEN_PROJECT_SSH_SERVER_DOMAIN_NAME, self::OPEN_PROJECT_SSH_SERVER_PORT);
-            if (!$ssh->login(self::OPEN_PROJECT_SSH_SERVER_USERNAME, self::OPEN_PROJECT_SSH_SERVER_PASSWORD)) {
-                exit('Login Failed');
-            }
-            $ssh->setTimeout(0);
-
-            //create project name and command to execute
+            //create new project
             $projectName = explode("@", $mailInfo->fromAddress, 2);
             $projectIdentifier =
                 strtolower('created-support-' . preg_replace('/[^a-z]/i', '', $projectName[0]) . '-' . rand(1, 99));
-            $createProjectTask =
-                'openproject run bundle exec rails runner "Project.create(identifier:  \'' . $projectIdentifier
-                . '\' , name: \'Support - ' . ucfirst($projectName[0]) . '\');"';
-
-            //execute command
-            $output = $ssh->exec($createProjectTask);
+            self::createProject($projectIdentifier, 'Support - ' . ucfirst($projectName[0]));
 
             //load project id
             $projectsNew = self::getAllProjects();
             foreach ($projectsNew->_embedded->elements as $projectVal) {
-                //if (strcmp($projectVal->identifier, $projectIdentifier) == 0) {
                 if (stripos($projectVal->identifier, $projectIdentifier) !== false) {
                     $supportProjectId = $projectVal->id;
                 }
             }
 
             //add user to project as member
-            $memberCreateTask =
-                'openproject run bundle exec rails runner "Member.create(project_id: ' . intval($supportProjectId)
-                . ', role_ids: [' . intval(self::SUPPORT_ROLE_ID) . '], user_id: ' . intval($userId)
-                . ');"';
+            self::addProjectMembership($supportProjectId, $userId, self::SUPPORT_ROLE_ID);
 
             //also add default user to project as member
-            $memberCreateTaskDefaultUser =
-                'openproject run bundle exec rails runner "Member.create(project_id: ' . intval($supportProjectId)
-                . ', role_ids: [' . intval(self::ADMIN_ROLE_ID) . '], user_id: '
-                . intval(self::SUPPORT_DEFAULT_ASSIGN_USER) . ');"';
-
-            //connect again
-            $output = $ssh->exec($memberCreateTask);
-            $output = $ssh->exec($memberCreateTaskDefaultUser);
-            $ssh->disconnect();
+            self::addProjectMembership($supportProjectId, self::SUPPORT_DEFAULT_ASSIGN_USER, self::ADMIN_ROLE_ID);
         }
 
         //assign project data
@@ -270,6 +233,45 @@ class OpenProject
         self::addUserToProjectAsWatcher($workPackageId, $userId);
 
         return $respArray->id;
+    }
+
+    public static function addProjectMembership($projectId, $userId, $roleId)
+    {
+        //project data
+        $projectArray = array();
+        $projectArray['href'] = '/api/v' . self::OPEN_PROJECT_API_VERSION . '/projects/' . intval($projectId);
+
+        //user data
+        $userArray = array();
+        $userArray['href'] = '/api/v' . self::OPEN_PROJECT_API_VERSION . '/users/' . intval($userId);
+
+        //roles data
+        $rolesArray = array();
+        $roleArray = array();
+        $roleArray['href'] = '/api/v' . self::OPEN_PROJECT_API_VERSION . '/roles/' . intval($roleId);
+        array_push($rolesArray, $roleArray);
+
+        //membership data
+        $membershipData = array();
+        $membershipData['project'] = $projectArray;
+        $membershipData['principal'] = $userArray;
+        $membershipData['roles'] = $rolesArray;
+
+        //send request
+        $ch = curl_init(self::OPEN_PROJECT_API_URL . 'memberships');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_USERPWD, 'apikey:' . self::OPEN_PROJECT_API_KEY);
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json'
+        ));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($membershipData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 200);
+        curl_exec($ch);
+        curl_close($ch);
     }
 
     public static function createUser($mailInfo)

@@ -30,7 +30,6 @@ This small PHP script works as follows:
 ## Requirements
 * Web server with php 7+
 * OpenProject server with version 8.0.0+
-* OpenProject server with ssh server runing
 * Mail server (mail box as imap available)
 
 ## Installation
@@ -52,8 +51,7 @@ This small PHP script works as follows:
 
 ## Useful informations
 * The script marks mails as flagged if the already processed by the script
-* OpenProject API v3 is used. The api is very basic and does not offer all needed functions (create project, add member to project, edit the author of a project,...)
-* There is also a command line interface for some basic task, e.g. create project. I use this for creating project and assign a user to this project. For this i connect via ssh and execute the command (like on putty)
+* OpenProject API v3 is used (newest API version)
 
 ## Possible future improvments:
 * Bot / spam check
