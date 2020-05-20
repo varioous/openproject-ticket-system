@@ -7,7 +7,8 @@ This small PHP script works as follows:
   * If the user has no support-project assigned (identifier contains "support") a new project is created. This is needed because otherwise the user would see the support tickets of other projects/user
   * If the user has an account and a support-project, the ticket is created in this support-project
   * A mail to the user is sent with information about the ticket (number, link)
-* Slack integration: After ticket creation a slack message is sent to slack channel
+* Slack integration: After ticket creation a message is sent to slack channel
+* Rocket.Chat integration: After ticket creation a message is sent to rocket chat channel
 * Job integration: For every incoming mail to a job adress an automatic ticket is created in the ticket project inside OpenProject and assigned to the human ressource person
 * Reply to ticket (with ticket id in subject): A comment on the ticket is created
 
@@ -18,6 +19,7 @@ This small PHP script works as follows:
 ## Updates
 * composer support
 * slack integration
+* Rocket.Chat integration
 * installation instruction
 * creation of tickets from job mailbox
 * reply to ticket (with ticket id in subject): A comment on the ticket is created
@@ -25,6 +27,7 @@ This small PHP script works as follows:
 ## Features
 * Turn OpenProject in a ticket system
 * Slack Integration
+* Rocket.Chat Integration
 * Support for job applications
 
 ## Requirements
