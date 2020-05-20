@@ -50,6 +50,18 @@ class OpenProject
 
     //slack api url
     const SLACK_API_URL = "https://slack.com/api/chat.postMessage";
+    
+    //rocket chat api url
+    const ROCKET_CHAT_API_URL = "xxxxxxxxxxxx";
+
+    //rocket chat room id
+    const ROCKET_CHAT_ROOM_ID = "xxxx";
+
+    //rocket chat auth token
+    const ROCKET_CHAT_AUTH_TOKEN = "sxxxxxxxxxxxxx";
+
+    //rocket chat user id
+    const ROCKET_CHAT_USER_ID = "xxxxxxxxxx";
 
     public static function createJobTicket($mail, $mailInfo)
     {
@@ -418,6 +430,26 @@ class OpenProject
         $resp = curl_exec($curl);
         curl_close($curl);
         return json_decode($resp);
+    }
+    
+    public static function sendMessageToRocketChat($message)
+    {
+        $data = array("message" => ["rid" => self::ROCKET_CHAT_ROOM_ID, "msg" => $message]);
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => self::ROCKET_CHAT_API_URL,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => json_encode($data),
+          CURLOPT_HTTPHEADER => array(
+            "X-Auth-Token: ".self::ROCKET_CHAT_AUTH_TOKEN,
+            "X-User-Id: ".self::ROCKET_CHAT_USER_ID,
+            "Content-type: application/json"
+          ),
+        ));
+        
+        curl_exec($curl);
+        curl_close($curl);
     }
 
     public static function sendMessageToSlack($message)
