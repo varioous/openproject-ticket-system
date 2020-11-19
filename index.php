@@ -190,7 +190,7 @@ foreach ($mailsIds as $mailId) {
 <p>Wir danken Ihnen für die Zusendung Ihrer Bewerbung und das damit entgegengebrachte Vertrauen.</p>
 <p>Die Bearbeitung der eingegangenen Bewerbungen wird einige Zeit in Anspruch nehmen. Wir bitten Sie um ein wenig Geduld. Nach eingehender Prüfung der Unterlagen werden wir uns unaufgefordert wieder mit Ihnen in Verbindung setzen.</p>
 <p>Mit freundlichen Grüßen,<br>
-Georg Wurz</p>';
+Various Interactive</p>';
             $mail->send();
 
             //mark mail as flagged -> means already processed
@@ -199,3 +199,14 @@ Georg Wurz</p>';
     }
 }
 $mailbox->disconnect();
+
+//The name of the folder.
+$folder = '/var/www/public_html/attachments';
+$files = glob($folder . '/*');
+foreach($files as $file){
+    if(is_file($file)){
+        unlink($file);
+    }
+}
+
+echo 'successfully proccessed';
